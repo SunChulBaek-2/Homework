@@ -9,12 +9,17 @@ import ssun.pe.kr.homework.data.model.Images
 
 class MainViewModel : ViewModel() {
     val images: MutableLiveData<Images> = MutableLiveData()
+    val inProgress: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getImages() = launch(UI) {
+        inProgress.value = true
+
         try {
             images.value = DemoRepository.getImages().await()
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            inProgress.value = false
         }
     }
 }
